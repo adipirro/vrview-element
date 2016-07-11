@@ -1,0 +1,122 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<!--
+`vrview-element`
+
+Wrapper for Google VRView's
+
+@demo demo/index.html
+-->
+
+<dom-module id="vrview-element">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <iframe
+      width="100%"
+      height="100%"
+      allowfullscreen
+      frameborder="0"
+      src="[[_computedSrc]]"></iframe>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'vrview-element',
+
+      properties: {
+
+        /**
+        * Location where VR View code is hosted.
+        * Defaults to the public google storage location.
+        * Host on same server as images/videos to avoid known issues
+        */
+        vrViewHostUrl: {
+          type: String,
+          value: '//storage.googleapis.com/vrview/index.html'
+        },
+
+        /**
+        *  URL of image to load (image or video required)
+        */
+        image: {
+          type: String,
+          value: null
+        },
+
+        /**
+        * URL of video to load (image or video required)
+        */
+        video: {
+          type: String,
+          value: null
+        },
+
+        /**
+        * True if content is in stacked stereo format. (optional)
+        */
+        isStereo: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+        * URL of still preview to load first. (optional)
+        */
+        preview: {
+          type: String,
+          value: null
+        },
+
+        /**
+        * Initial yaw of viewer, in degrees. (optional)
+        */
+        startYaw: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+        * True if motion is restricted to yaw only. (optional)
+        */
+        isYawOnly: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+        * Combines all the properties into a single source string that is passed to the iframe
+        */
+        _computedSrc: {
+          type: String,
+          computed: '_computeSrc(vrViewHostUrl, image, video, isStereo, preview, startYaw, isYawOnly)'
+        }
+
+      },
+
+      _computeSrc: function(vrViewHostUrl, image, video, isStereo, preview, startYaw, isYawOnly) {
+        var srcString = vrViewHostUrl + "?";
+
+        //image/video/preview urls can all be null...so only add them if they exist
+        if(image){
+          srcString += "image=" + image + "&";
+        }
+        if(video){
+          srcString += "video=" + video + "&";
+        }
+        if(preview){
+          srcString += "preview=" + preview + "&";
+        }
+
+        //Always have values for these variables (default or otherwise)...just slap em on there
+        srcString += "is_stereo=" + isStereo + "&" + "start_yaw=" + startYaw + "&" + "is_yaw_only=" + isYawOnly;
+
+        return srcString;
+      },
+    });
+  </script>
+</dom-module>
