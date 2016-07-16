@@ -1,6 +1,6 @@
 # \<vrview-element\>
 
-Wrapper for the Google vrview library
+Wrapper for Google's vrview library
 
 ## Install the Polymer-CLI
 
